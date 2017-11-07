@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GIPHY API</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="page-header banner">
+                <img class="center-block" src="giphy.png" alt=" Giphy Image">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div id="gif-view"></div>
+
+        <div id="buttons-view"></div>
+
+        <form id="gif-form">
+            <label for="gif-input">Choose a gif</label>
+            <input type="text" id="gif-input">
+            <br>
+
+            <input id="add-gif" type="submit" value="Add Gif">
+        </form>
+
+
+
+        <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+
+        <script type="text/javascript">
+
+            var categories = ["Randy Savage", "Ric Flair", "Hulk Hogan", "Antonio Inoki", "Andre The Giant"]
+
+
+            function displayGifInfo() {
+                var gif = $(this).attr("data-name");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gif + "&api_key=WtjJTHrZlTUm5VVPNCjP5BsOhXR8y4PK";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).done(function (response) {
+
+                    for (var i = 0; i <categories.length; i++){
+                       
+
+                    console.log(response);
+                    var gifDiv = $("<div class='gif-container'>")
+                    var imgURL = response.data[0].images.fixed_height.url
+                    var image = $("<img>").attr("src", imgURL);
+                    gifDiv.append(image);
+                    $("#gif-view").html(gifDiv);
+                }
+                });
+
+            }
+
+            function renderButtons() {
+
+                $("#buttons-view").empty();
+                for (var i = 0; i < categories.length; i++) {
+                    var a = $("<button>");
+                    a.addClass("gif");
+                    a.attr("data-name", categories[i]);
+                    a.text(categories[i]);
+                    $("#buttons-view").append(a);
+                }
+            }
+
+
+            $("#add-gif").on("click", function (event) {
+                event.preventDefault();
+                var gif = $("#gif-input").val().trim();
+                categories.push(gif);
+                renderButtons();
+      });
+      
+      $(document).on("click", ".gif", displayGifInfo);
+
+      renderButtons();
+        </script>
+    </div>
+</body>
+
+</html>
