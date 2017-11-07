@@ -54,12 +54,13 @@
                     method: "GET"
                 }).done(function (response) {
 
+                    categories = response.data; 
                     for (var i = 0; i <categories.length; i++){
-                       
-
+                    
+                        
                     console.log(response);
-                    var gifDiv = $("<div class='gif-container'>")
-                    var imgURL = response.data[0].images.fixed_height.url
+                    var gifDiv = $("<div class='gif-container'>");
+                    var imgURL = categories[i].images.fixed_height.url;
                     var image = $("<img>").attr("src", imgURL);
                     gifDiv.append(image);
                     $("#gif-view").html(gifDiv);
